@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaushal Patel - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --shadow-color: #a3b1c6;
+            --light-shadow: #ffffff;
+        }
+        
+        .neo-morphism {
+            border-radius: 20px;
+            background: #e0e5ec;
+            box-shadow: 8px 8px 16px var(--shadow-color),
+                       -8px -8px 16px var(--light-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .neo-morphism:hover {
+            box-shadow: 12px 12px 20px var(--shadow-color),
+                       -12px -12px 20px var(--light-shadow);
+        }
+
+        .neo-button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: #e0e5ec;
+            box-shadow: 5px 5px 10px var(--shadow-color),
+                       -5px -5px 10px var(--light-shadow);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .neo-button:active {
+            box-shadow: inset 5px 5px 10px var(--shadow-color),
+                       inset -5px -5px 10px var(--light-shadow);
+        }
+
+        .loading {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #3498db;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-[#e0e5ec] min-h-screen font-['Poppins']">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Profile Section -->
+        <div class="neo-morphism p-8 mb-8 fade-in">
+            <div id="profile-info" class="text-center">
+                <div class="w-32 h-32 mx-auto mb-4 overflow-hidden rounded-full neo-morphism">
+                    <img id="profile-image" src="https://via.placeholder.com/128" alt="Profile" class="w-full h-full object-cover">
+                </div>
+                <h1 id="name" class="text-2xl font-bold mb-2">Loading...</h1>
+                <p id="headline" class="text-gray-600 mb-4">Loading...</p>
+                <div id="loading" class="loading mx-auto"></div>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="neo-morphism p-8 mb-8 fade-in">
+            <h2 class="text-xl font-bold mb-4">Experience</h2>
+            <div id="experience-list" class="space-y-4"></div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="neo-morphism p-8 mb-8 fade-in">
+            <h2 class="text-xl font-bold mb-4">Skills</h2>
+            <div id="skills-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="neo-morphism p-8 fade-in">
+            <h2 class="text-xl font-bold mb-4">Contact Me</h2>
+            <form id="contact-form" class="space-y-4">
+                <div>
+                    <input type="text" id="name-input" placeholder="Your Name" required
+                           class="w-full p-3 neo-morphism border-none outline-none bg-[#e0e5ec]">
+                </div>
+                <div>
+                    <input type="email" id="email-input" placeholder="Your Email" required
+                           class="w-full p-3 neo-morphism border-none outline-none bg-[#e0e5ec]">
+                </div>
+                <div>
+                    <textarea id="message-input" placeholder="Your Message" required
+                            class="w-full p-3 neo-morphism border-none outline-none bg-[#e0e5ec] h-32"></textarea>
+                </div>
+                <button type="submit" class="neo-button">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // MongoDB App Configuration
+        const APP_SLUG = "portfolio-783921";
+        const API_URL = "https://r0c8kgwocscg8gsokogwwsw4.zetaverse.one/mongodb";
+        const AUTH_TOKEN = "Bearer PZglpn5VMNdPHzXrT0G7n4n8Giy2";
+
+        // Simulated LinkedIn data (replace with actual API integration)
+        const mockLinkedInData = {
+            name: "Kaushal Patel",
+            headline: "Data Scientist | Software Developer",
+            image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+            experience: [
+                {
+                    title: "Data Scientist",
+                    company: "Tech Company",
+                    duration: "2020 - Present"
+                },
+                {
+                    title: "Software Developer",
+                    company: "Dev Corp",
+                    duration: "2018 - 2020"
+                }
+            ],
+            skills: ["Python", "Machine Learning", "Data Analysis", "JavaScript", "React", "Node.js"]
+        };
+
+        // Load Profile Data
+        function loadProfileData() {
+            document.getElementById('loading').style.display = 'block';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                document.getElementById('profile-image').src = mockLinkedInData.image;
+                document.getElementById('name').textContent = mockLinkedInData.name;
+                document.getElementById('headline').textContent = mockLinkedInData.headline;
+                
+                // Load Experience
+                const experienceList = document.getElementById('experience-list');
+                experienceList.innerHTML = mockLinkedInData.experience.map(exp => `
+                    <div class="neo-morphism p-4">
+                        <h3 class="font-bold">${exp.title}</h3>
+                        <p class="text-gray-600">${exp.company}</p>
+                        <p class="text-sm text-gray-500">${exp.duration}</p>
+                    </div>
+                `).join('');
+
+                // Load Skills
+                const skillsList = document.getElementById('skills-list');
+                skillsList.innerHTML = mockLinkedInData.skills.map(skill => `
+                    <span class="neo-button">${skill}</span>
+                `).join('');
+
+                document.getElementById('loading').style.display = 'none';
+            }, 1000);
+        }
+
+        // Handle Contact Form Submission
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name-input').value,
+                email: document.getElementById('email-input').value,
+                message: document.getElementById('message-input').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': AUTH_TOKEN
+                    },
+                    body: JSON.stringify({
+                        appSlug: APP_SLUG,
+                        action: 'create',
+                        collection: 'messages',
+                        data: formData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Message sent successfully!');
+                    e.target.reset();
+                } else {
+                    alert('Failed to send message. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadProfileData);
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
